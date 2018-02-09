@@ -19,3 +19,7 @@ BugReports: https://github.com/samaperrin/analyseslope/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
