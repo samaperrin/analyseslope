@@ -8,7 +8,6 @@
 #' @examples
 #' identify_outliers(slope_max, upstream_slopes_test)
 #' # Will have to zoom on graph and click outliers
-#' # Doesn't take long
 
 # parameter_of_interest <- "slope_max"
 
