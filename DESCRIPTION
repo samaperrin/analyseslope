@@ -8,6 +8,13 @@ Maintainer: Sam Perrin <sam.perrin@ntnu.no>
 Description: This package downloads slope parameters for connection between two rivers and 
 performs Bayseian analysis, describing the relation between slope and fish upstream presence.
 License: What license is it under?
+Imports:
+    pool,
+    dplyr,
+    dbplyr,
+    R2jags,
+    RPostgreSQL,
+    postGIStools
 URL: https://github.com/samaperrin/analyseslope
 BugReports: https://github.com/samaperrin/analyseslope/issues
 Encoding: UTF-8
