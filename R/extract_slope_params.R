@@ -1,5 +1,22 @@
 
-##### ---- Function 1. Pull slope parameters from connectivity matrix and create data frame ###########
+#' This function extracts slope parameters for the connection between two lakes from the requisite database.
+#'
+#' @param parameters_of_interest A vector containing the names of the slope parameters you wish to extract. These can be extracted using the code found in the examples.
+#' @param connectivity A matrix which should include the upstream and downstream lake you wish to evalutate and the presence or absence of your target fish in the upstream lake.
+#' @return The connectivity table with slope parameters adjoined.
+#' @examples
+#'
+#' # Extract parameters using the following code:
+#' parameters <- colnames(tbl(database_folder, "example_connectivity_matrix") %>%
+#' head() %>%
+#'  collect())
+#'
+#' # Check parameters you need
+#' names(parameters)
+#'
+#' parameters_of_interest <- parameters[12:15]
+#'
+#' slope_table <- extract_slope_params(parameters_of_interest, connectivity)
 
 # Define parameters of interest
 
