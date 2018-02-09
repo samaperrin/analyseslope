@@ -1,50 +1,56 @@
-###### ----- Function 4: Bayesian analysis ################
+#' Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.
+#'
+#' @param upstream_slopes_test Table dervied from the extract_slope_params function.
+#' @param parameters_for_analysis All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.
+#' @return A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter on fish presence/absence and B) Full Bayesian analysis for each parameter.
+
+
 
 # parameters_for_analysis <- colnames(upstream_slopes_test)[6:7]
 
 slope_analysis <- function(upstream_slopes_test, parameters_for_analysis){
-  
+
   # Specify model in BUGS language
   cat(file = "Perch_Bayes_GLM.txt","
       model {
-      
+
       # Priors
       beta ~ dnorm(0, 0.00001)        # Prior for slopes
-      
+
       alpha ~ dnorm(0, 1.0E-06)       # Prior for intercepts
-      
+
       # Likelihood
       for (i in 1:nsite){
-      C[i] ~ dbern(p[i])         
+      C[i] ~ dbern(p[i])
       logit(p[i]) <- alpha + beta*slope[i]
       }
       }
       ")
-  
-  z=list() 
+
+  z=list()
   y=as.data.frame(matrix(NA,nrow=length(parameters_for_analysis),ncol=9))
-  
+
   for(i in 1:length(parameters_for_analysis))
   {
     presence <- upstream_slopes_test$Present
     nsites <- length(presence)
     site <- 1:nsites
     slope <- upstream_slopes_test[,parameters_for_analysis[i]]
-    
+
     jags.data <- list(C = presence, nsite = nsites, slope = slope)
-    
+
     # Initial values
     inits <- function () list(alpha = runif(1, -10, 10), beta = runif(1,-1,1))
-    
+
     # Parameters monitored
     params <- c("alpha", "beta","p")
-    
+
     # MCMC settings
     ni <- 50000
     nt <- 10
     nb <- 40000
     nc <- 3
-    
+
     # Call winbugs from R
     print(paste("Running", parameters_for_analysis[i]))
     sink("/dev/null")
