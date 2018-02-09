@@ -5,8 +5,7 @@ Version: 0.1.0
 Author: person("Sam", "Perrin", email = "sam.perrin@ntnu.no",
                   role = c("aut", "cre"))
 Maintainer: Sam Perrin <sam.perrin@ntnu.no>
-Description: This package downloads slope parameters for connection between two rivers and 
-performs Bayseian analysis, describing the relation between slope and fish upstream presence.
+Description: This package downloads slope parameters for connection between two rivers and performs Bayseian analysis, describing the relation between slope and fish upstream presence.
 License: What license is it under?
 Imports:
     pool,

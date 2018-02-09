@@ -1,15 +1,21 @@
-# Need to import the install.packages if needed script here
 
-library(pool)
-library(dplyr)
-library(dbplyr)
-library(postGIStools)
-library(RPostgreSQL)
-library(R2jags)
+#' Initialises connection with database.
+#'
+#' @param database Database to connect to.
+
+db_connect <- function(database) {
+
+# library(pool)
+# library(dplyr)
+# library(dbplyr)
+# library(postGIStools)
+# library(RPostgreSQL)
+# library(R2jags)
+
 
 #Set connection parameters
 pg_drv<-dbDriver("PostgreSQL")
-pg_db <- "nofa"
+pg_db <- database
 pg_schema <- "Hydrography"
 pg_tmp_schema <- "temporary"
 pg_user <- rstudioapi::askForPassword("Enter username")
@@ -42,3 +48,5 @@ temp_db <- dbPool(
   options="-c search_path=temporary" # set db schema from where to look
 )
 
+
+}
