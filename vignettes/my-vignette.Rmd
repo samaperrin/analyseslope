@@ -14,15 +14,18 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+database <- 'nofa'
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+The analyseslope package has been created to make it easy to derive and then analyse the effects of slope parameters between two connected lakes on the presence of a fish species in an upstream lake. 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+At present, this package has only been developed to analyse perch in a selected few lakes across Sweden, however with influx of new data and work on other species presence, this will hopefully eventually be expanded to include more species across more of Scandinavia.
 
-## Vignette Info
+## Package run-through
+
+Let's start with the most basic function, the `slope_dbconnect` function.
+
+*italic* Note: For privcay's sake I've already imported our database's name earlier.
 
 Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
 

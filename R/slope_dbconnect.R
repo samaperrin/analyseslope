@@ -3,7 +3,7 @@
 #'
 #' @param database Database to connect to.
 
-db_connect <- function(database) {
+slope_dbconnect <- function(database, server) {
 
 # library(pool)
 # library(dplyr)
@@ -20,7 +20,7 @@ pg_schema <- "Hydrography"
 pg_tmp_schema <- "temporary"
 pg_user <- rstudioapi::askForPassword("Enter username")
 pg_password <- rstudioapi::askForPassword(paste("Enter password for",pg_user))
-pg_host <- "vm-srv-finstad.vm.ntnu.no"
+pg_host <- server
 
 
 #Initialise connection
