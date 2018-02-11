@@ -20,7 +20,7 @@
 
 # Define parameters of interest
 
-# parameters_of_interest <- c("upstream_lakes", "upstream_lakes_slope_max_max","upstream_lakes_slope_max", "upstream_lakes_slope_perc_90", "upstream_lakes_slope_perc_90_max")
+parameters_of_interest <- c("upstream_lakes", "upstream_lakes_slope_max_max","upstream_lakes_slope_max", "upstream_lakes_slope_perc_90", "upstream_lakes_slope_perc_90_max")
 # con already defined
 
 # Upload the lake connections
@@ -31,7 +31,7 @@
 # head(connectivity)
 
 
-extract_slope_params <- function(parameters_of_interest, connectivity) {
+extract_slope_params <- function(parameters_of_interest, connectivity, con) {
   # Create query
 
   upstream_slopes_con <- "SELECT * FROM (SELECT lakeid"

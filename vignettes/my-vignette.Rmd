@@ -11,10 +11,21 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
+  error=TRUE,
   collapse = TRUE,
   comment = "#>"
 )
+library(pool)
+library(dplyr)
+library(dbplyr)
+library(postGIStools)
+library(RPostgreSQL)
+library(rstudioapi)
+library(R2jags)
+
+
 database <- 'nofa'
+server <- "vm-srv-finstad.vm.ntnu.no"
 ```
 
 The analyseslope package has been created to make it easy to derive and then analyse the effects of slope parameters between two connected lakes on the presence of a fish species in an upstream lake. 
@@ -25,11 +36,26 @@ At present, this package has only been developed to analyse perch in a selected 
 
 Let's start with the most basic function, the `slope_dbconnect` function.
 
-*italic* Note: For privcay's sake I've already imported our database's name earlier.
+*Note: For privcay's sake I've already imported our database and server's names earlier.*
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+``` {r slope_connect, echo=FALSE}
+source("../R/slope_dbconnect.R")
+con <- slope_dbconnect(database, server)
+```
 
+All you need to do here is initiate the connection with our database on the server. This intiates all of the links that will be used in our next function, `extract_slope_params`. Ideally this function will be made more flexible in the future.
+
+``` {r extract_slope_params, echo=FALSE}
+source("../R/extract_slope_params.R")
+
+connectivity_raw <- read.csv(file="../Data/sweden_connections.csv",sep=',',header=T)
+connectivity <- connectivity_raw %>% 
+  filter(!is.na(Present))
+
+slope_table <- extract_slope_params(c("upstream_lakes","upstream_lakes_slope_max_max","upstream_lakes_slope_perc_90"), connectivity, con)
+print(slope_table)
 ## Styles
+```
 
 The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
 

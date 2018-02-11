@@ -2,17 +2,11 @@
 #' Initialises connection with database.
 #'
 #' @param database Database to connect to.
+#'
+
+
 
 slope_dbconnect <- function(database, server) {
-
-# library(pool)
-# library(dplyr)
-# library(dbplyr)
-# library(postGIStools)
-# library(RPostgreSQL)
-# library(R2jags)
-
-
 #Set connection parameters
 pg_drv<-dbDriver("PostgreSQL")
 pg_db <- database
@@ -48,5 +42,5 @@ temp_db <- dbPool(
   options="-c search_path=temporary" # set db schema from where to look
 )
 
-
+return(con)
 }
