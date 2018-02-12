@@ -7,9 +7,7 @@
 plot_slope_params(upstream_slopes_test, dim)
 }
 \arguments{
-\item{upstream_slopes_test}{Table generated from the extract_slope_params function.
-
-Note: this function assumes that you want to plot all the slope parameters you derived for the upstream_slopes_test table.}
+\item{upstream_slopes_test}{Table generated from the extract_slope_params function.}
 }
 \description{
 Creates a series of plots comparing slope parameters to presence of fish upstream.

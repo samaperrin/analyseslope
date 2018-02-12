@@ -3,6 +3,7 @@
 #'
 #' @param database Database to connect to.
 #'
+#' @export
 
 
 

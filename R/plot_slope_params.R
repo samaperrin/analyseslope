@@ -2,7 +2,9 @@
 #'
 #' @param upstream_slopes_test Table generated from the extract_slope_params function.
 #'
-#' Note: this function assumes that you want to plot all the slope parameters you derived for the upstream_slopes_test table.
+#' @export
+
+# Note: this function assumes that you want to plot all the slope parameters you derived for the upstream_slopes_test table.
 
 ####### ---- Plot/model data #######################
 
