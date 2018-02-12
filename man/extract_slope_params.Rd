@@ -19,3 +19,18 @@ The connectivity table with slope parameters adjoined.
 \description{
 This function extracts slope parameters for the connection between two lakes from the requisite database.
 }
+\examples{
+
+
+# Extract parameters using the following code:
+parameters <- colnames(tbl(database_folder, "example_connectivity_matrix") \%>\%
+head() \%>\%
+ collect())
+
+# Check parameters you need
+names(parameters)
+
+parameters_of_interest <- parameters[12:15]
+
+slope_table <- extract_slope_params(parameters_of_interest, connectivity)
+}

@@ -42,6 +42,6 @@ temp_db <- dbPool(
   dbname = "nofa",
   options="-c search_path=temporary" # set db schema from where to look
 )
-
-return(list(con=con,temp_db=temp_db))
+a <- list(con=con,temp_db=temp_db)
+return(a)
 }

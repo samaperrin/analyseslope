@@ -6,7 +6,7 @@
 #' @param con The connection parameters set to connect to your database
 #' @return The connectivity table with slope parameters adjoined.
 #' @examples
-#' @export
+#'
 #'
 #' # Extract parameters using the following code:
 #' parameters <- colnames(tbl(database_folder, "example_connectivity_matrix") %>%
@@ -19,6 +19,7 @@
 #' parameters_of_interest <- parameters[12:15]
 #'
 #' slope_table <- extract_slope_params(parameters_of_interest, connectivity)
+#' @export
 
 # Define parameters of interest
 
