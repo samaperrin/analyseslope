@@ -3,6 +3,7 @@
 #'
 #' @param parameters_of_interest A vector containing the names of the slope parameters you wish to extract. These can be extracted using the code found in the examples.
 #' @param connectivity A matrix which should include the upstream and downstream lake you wish to evalutate and the presence or absence of your target fish in the upstream lake.
+#' @param con The connection parameters set to connect to your database
 #' @return The connectivity table with slope parameters adjoined.
 #' @examples
 #'
@@ -20,7 +21,7 @@
 
 # Define parameters of interest
 
-parameters_of_interest <- c("upstream_lakes", "upstream_lakes_slope_max_max","upstream_lakes_slope_max", "upstream_lakes_slope_perc_90", "upstream_lakes_slope_perc_90_max")
+# parameters_of_interest <- c("upstream_lakes", "upstream_lakes_slope_max_max","upstream_lakes_slope_max", "upstream_lakes_slope_perc_90", "upstream_lakes_slope_perc_90_max")
 # con already defined
 
 # Upload the lake connections

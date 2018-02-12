@@ -1,0 +1,107 @@
+---
+title: "Vignette for R-package analyseslope"
+author: "Sam Perrin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Slope_Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  error=TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+library(pool)
+library(dplyr)
+library(dbplyr)
+library(postGIStools)
+library(RPostgreSQL)
+library(getPass)
+library(kableExtra)
+library(R2jags)
+
+
+database <- 'nofa'
+server <- "vm-srv-finstad.vm.ntnu.no"
+```
+
+The analyseslope package has been created to make it easy to derive and then analyse the effects of slope parameters between two connected lakes on the presence of a fish species in an upstream lake. 
+
+At present, this package has only been developed to analyse perch in a selected few lakes across Sweden, however with influx of new data and work on other species presence, this will hopefully eventually be expanded to include more species across more of Scandinavia.
+
+## Package run-through
+
+### Connections and data extraction
+
+Let's start with the most basic function, the `slope_dbconnect` function. The only inputs here are the database and server names. The output is a connection with the server, to be used in the next function. There is an option in the future to initiate several other connections, to bring in more data if needed.
+
+*Note: For privcay's sake I've already imported our database and server's names earlier.*
+
+``` {r slope_connect, include = TRUE, echo = TRUE}
+source("../R/slope_dbconnect.R")
+con <- slope_dbconnect(database, server)
+```
+
+As you can see from the output, you'll also need to enter your username and password in pop-up windows.
+
+The next function `extract_slope_params`, creates and runs a SQL query based on the parameters of interest, defined below. It merges this with our connectivity table, which contains a lake that was rotenone treated, the nearest downstream lake, and whether or not the target fish (in this case perch) were able to recolonise. The connectivity file can be found in the Data folder of this compendium.
+
+``` {r extact_slope_params_setup, include=FALSE}
+source("../R/extract_slope_params.R")
+connectivity_raw <- read.csv(file="../Data/sweden_connections.csv",sep=',',header=T)
+connectivity <- connectivity_raw %>% 
+  filter(!is.na(Present))
+```
+
+
+``` {r extract_slope_params}
+parameters_of_interest <- c("upstream_lakes","upstream_lakes_slope_max_max","upstream_lakes_slope_perc_90")
+slope_table <- extract_slope_params(parameters_of_interest, connectivity, con)
+```
+
+``` {r extract_slope_params_show, echo=FALSE}
+
+knitr::kable(head(slope_table)[-1],format='html') %>%
+  kable_styling(c("striped","bordered"), full_width = F)
+```
+
+
+I'll add an option at some point to include locationID and se_sjoid in this if need be.
+
+
+## Data analysis and visualisation
+
+The `plot_slope_params` function enables us to make a series of plots showing the relationships between each slope parameter and the presence/absence of perch in the upstream lake. Our only input is the table created by the `extract_slope_params` function, and a vector of 2 integers defining in what format you want the slopes represented.
+
+This function assumes that you want the plots for all the parameters of interest previously defined. There will be an option to narrow this down in the future.
+
+```{r, plot_slope_params}
+source("../R/plot_slope_params.R")
+plot_slope_params(slope_table,c(1,1))
+```
+
+Obviously the graphs are a bit squashed in this viggnette, but they work fine in a normal Rstudio session. I usually use c(2,2) as my dimensions for plot display.
+
+You can then identify plot outliers using `identify_outliers`. You will need to select a single parameter of interest, and input the slope_table and this parameter. The plot will appear, at which point you simply click on the outliers and hit escape. The result will be a table containing your outliers.
+
+Note that the parameter of interest should be inserted as a character or text, not as an object.
+
+> identify_outliers(slope_table,"slope_max")
+
+Lastly, we have the slope_analysis function. This takes the slope parameter and performs Bayesian analysis of its effects on fish presence/absence upstream.  The inputs are again the slope table and a list of parameters you want to investigate. These parameters should be a vector of characters, as shown below.
+
+```{r, slope_analysis_setup}
+source("../R/slope_analysis.R")
+parameters_for_analysis <- c("slope_max_max","slope_perc_90")
+slope_analysed <- slope_analysis(slope_table,parameters_for_analysis)
+knitr::kable(slope_analysed$summary) %>%
+  kable_styling(c("striped","bordered"), full_width = F)
+```
+
+Quick interpretation of Bayesian inference - if 0 does not intercept the 95% credible interval, we have a significant result. Rhat and neff are indicators of convergence - if Rhat is 1 and the other is high, we have convergence.
+
+There is also a much more thorough analysis which can be found in `slope_analysed$all_data`.
