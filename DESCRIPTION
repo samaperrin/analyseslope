@@ -13,7 +13,8 @@ Imports:
     dbplyr,
     R2jags,
     RPostgreSQL,
-    postGIStools
+    postGIStools,
+    getPass
 URL: https://github.com/samaperrin/analyseslope
 BugReports: https://github.com/samaperrin/analyseslope/issues
 Encoding: UTF-8
@@ -21,5 +22,6 @@ LazyData: true
 RoxygenNote: 6.0.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

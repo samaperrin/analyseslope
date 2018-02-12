@@ -60,7 +60,7 @@ connectivity <- connectivity_raw %>%
 
 ``` {r extract_slope_params}
 parameters_of_interest <- c("upstream_lakes","upstream_lakes_slope_max_max","upstream_lakes_slope_perc_90")
-slope_table <- extract_slope_params(parameters_of_interest, connectivity, con)
+slope_table <- extract_slope_params(parameters_of_interest, connectivity, con$con)
 ```
 
 ``` {r extract_slope_params_show, echo=FALSE}
