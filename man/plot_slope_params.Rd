@@ -4,7 +4,7 @@
 \alias{plot_slope_params}
 \title{Creates a series of plots comparing slope parameters to presence of fish upstream.}
 \usage{
-plot_slope_params(upstream_slopes_test)
+plot_slope_params(upstream_slopes_test, dim)
 }
 \arguments{
 \item{upstream_slopes_test}{Table generated from the extract_slope_params function.

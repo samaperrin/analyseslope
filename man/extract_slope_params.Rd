@@ -4,12 +4,14 @@
 \alias{extract_slope_params}
 \title{This function extracts slope parameters for the connection between two lakes from the requisite database.}
 \usage{
-extract_slope_params(parameters_of_interest, connectivity)
+extract_slope_params(parameters_of_interest, connectivity, con)
 }
 \arguments{
 \item{parameters_of_interest}{A vector containing the names of the slope parameters you wish to extract. These can be extracted using the code found in the examples.}
 
 \item{connectivity}{A matrix which should include the upstream and downstream lake you wish to evalutate and the presence or absence of your target fish in the upstream lake.}
+
+\item{con}{The connection parameters set to connect to your database}
 }
 \value{
 The connectivity table with slope parameters adjoined.
