@@ -9,10 +9,10 @@
 
 # parameters_for_analysis <- colnames(upstream_slopes_test)[6:7]
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species){
 
   # Specify model in BUGS language
-  cat(file = "Perch_Bayes_GLM.txt","
+  cat(file = "Slope_Bayes_GLM.txt","
       model {
 
       # Priors
@@ -33,7 +33,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis){
 
   for(i in 1:length(parameters_for_analysis))
   {
-    presence <- upstream_slopes_test$Present
+    presence <- upstream_slopes_test[,species]
     nsites <- length(presence)
     site <- 1:nsites
     slope <- upstream_slopes_test[,parameters_for_analysis[i]]
