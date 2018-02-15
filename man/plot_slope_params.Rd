@@ -4,10 +4,14 @@
 \alias{plot_slope_params}
 \title{Creates a series of plots comparing slope parameters to presence of fish upstream.}
 \usage{
-plot_slope_params(upstream_slopes_test, dim)
+plot_slope_params(upstream_slopes_test, dim, species)
 }
 \arguments{
 \item{upstream_slopes_test}{Table generated from the extract_slope_params function.}
+
+\item{dim}{The dimensions your plots should appear in}
+
+\item{species}{The species to plot}
 }
 \description{
 Creates a series of plots comparing slope parameters to presence of fish upstream.

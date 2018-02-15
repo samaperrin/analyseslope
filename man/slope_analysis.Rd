@@ -4,12 +4,14 @@
 \alias{slope_analysis}
 \title{Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.}
 \usage{
-slope_analysis(upstream_slopes_test, parameters_for_analysis)
+slope_analysis(upstream_slopes_test, parameters_for_analysis, species)
 }
 \arguments{
 \item{upstream_slopes_test}{Table dervied from the extract_slope_params function.}
 
 \item{parameters_for_analysis}{All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.}
+
+\item{species}{Species to analyse}
 }
 \value{
 A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter on fish presence/absence and B) Full Bayesian analysis for each parameter.
