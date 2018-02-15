@@ -56,7 +56,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     # Call winbugs from R
     print(paste("Running", parameters_for_analysis[i]))
     sink("/dev/null")
-    output <- jags(jags.data, inits, params, "Perch_Bayes_GLM.txt", n.chains = nc,
+    output <- jags(jags.data, inits, params, "Slope_Bayes_GLM.txt", n.chains = nc,
                    n.thin = nt, n.burnin = nb, n.iter = ni)
     output_update <- update(output, n.iter = 100000, n.thin = 10)
     sink()
