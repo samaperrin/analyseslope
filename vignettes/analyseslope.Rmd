@@ -52,9 +52,9 @@ The next function `extract_slope_params`, creates and runs a SQL query based on 
 
 ``` {r extact_slope_params_setup, include=FALSE}
 source("../R/extract_slope_params.R")
-connectivity_raw <- read.csv(file="../Data/sweden_connections.csv",sep=',',header=T)
+connectivity_raw <- read.csv(file="../Data/sweden_connection_wPike.csv",sep=',',header=T)
 connectivity <- connectivity_raw %>% 
-  filter(!is.na(Present))
+  filter(!is.na(downstreamLakeID))
 ```
 
 
@@ -81,7 +81,7 @@ This function assumes that you want the plots for all the parameters of interest
 
 ```{r, plot_slope_params}
 source("../R/plot_slope_params.R")
-plot_slope_params(slope_table,c(1,1))
+plot_slope_params(slope_table,c(1,1),"Pike")
 ```
 
 Obviously the graphs are a bit squashed in this viggnette, but they work fine in a normal Rstudio session. I usually use c(2,2) as my dimensions for plot display.
@@ -97,7 +97,7 @@ Lastly, we have the slope_analysis function. This takes the slope parameter and 
 ```{r, slope_analysis_setup}
 source("../R/slope_analysis.R")
 parameters_for_analysis <- c("slope_max_max","slope_perc_90")
-slope_analysed <- slope_analysis(slope_table,parameters_for_analysis)
+slope_analysed <- slope_analysis(slope_table,parameters_for_analysis,"Pike")
 knitr::kable(slope_analysed$summary) %>%
   kable_styling(c("striped","bordered"), full_width = F)
 ```

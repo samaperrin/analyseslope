@@ -15,7 +15,7 @@ plot_slope_params <- function(upstream_slopes_test, dim, species) {
   short_poi <- gsub("upstream_lakes_","",parameters_of_interest)
 
   for (i in 1:(length(parameters_of_interest)-1)){
-    plot(upstream_slopes_test[,species] ~ upstream_slopes_test[,short_poi[-1][i]], xlab = short_poi[i+1], ylab = "Presence/absence upstream", main = paste("Perch presence/absence by",short_poi[i+1]))
+    plot(upstream_slopes_test[,species] ~ upstream_slopes_test[,short_poi[-1][i]], xlab = short_poi[i+1], ylab = "Presence/absence upstream", main = paste(species, "presence/absence by",short_poi[i+1]))
   }
 
 }
