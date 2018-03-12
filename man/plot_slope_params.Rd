@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_slope_params.R
 \name{plot_slope_params}
 \alias{plot_slope_params}
-\title{Creates a series of plots comparing slope parameters to presence of fish upstream.}
+\title{Plots slope parameter}
 \usage{
 plot_slope_params(upstream_slopes_test, dim, species)
 }

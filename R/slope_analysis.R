@@ -1,5 +1,6 @@
 #' Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.
 #'
+#' @title Analyse slope
 #' @param upstream_slopes_test Table dervied from the extract_slope_params function.
 #' @param parameters_for_analysis All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.
 #' @param species Species to analyse

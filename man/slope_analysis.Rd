@@ -2,7 +2,7 @@
 % Please edit documentation in R/slope_analysis.R
 \name{slope_analysis}
 \alias{slope_analysis}
-\title{Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.}
+\title{Analyse slope}
 \usage{
 slope_analysis(upstream_slopes_test, parameters_for_analysis, species)
 }

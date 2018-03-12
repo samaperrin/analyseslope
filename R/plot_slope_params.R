@@ -1,5 +1,6 @@
 #' Creates a series of plots comparing slope parameters to presence of fish upstream.
 #'
+#' @title Plots slope parameter
 #' @param upstream_slopes_test Table generated from the extract_slope_params function.
 #' @param dim The dimensions your plots should appear in
 #' @param species The species to plot

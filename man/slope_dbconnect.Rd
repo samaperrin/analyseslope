@@ -2,7 +2,7 @@
 % Please edit documentation in R/slope_dbconnect.R
 \name{slope_dbconnect}
 \alias{slope_dbconnect}
-\title{Initialises connection with database.}
+\title{Create database connections}
 \usage{
 slope_dbconnect(database, server)
 }

@@ -1,6 +1,7 @@
 
 #' Initialises connection with database.
 #'
+#' @title Create database connections
 #' @param database Database to connect to.
 #'
 #' @export
