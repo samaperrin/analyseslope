@@ -4,14 +4,14 @@
 \alias{dispersal_likelihood}
 \title{Likelihood of dispersal calculation}
 \usage{
-dispersal_likelihood(slopes, slope_analysis_species, parameter)
+dispersal_likelihood(slopes, slopes_analysis_species, parameter)
 }
 \arguments{
 \item{slopes}{List of lakes with their slopes upstream}
 
-\item{slope_analysis_species}{Bayesian slope analysis given by slope_analysis function}
-
 \item{parameter}{Slope parameter you wish to evaluate likelihood based on}
+
+\item{slope_analysis_species}{Bayesian slope analysis given by slope_analysis function}
 }
 \value{
 Table with lake ids and slopes, with likelihood of dispersal attached

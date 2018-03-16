@@ -7,7 +7,7 @@
 slope_analysis(upstream_slopes_test, parameters_for_analysis, species)
 }
 \arguments{
-\item{upstream_slopes_test}{Table dervied from the extract_slope_params function.}
+\item{upstream_slopes_test}{Table derived from the extract_slope_params function.}
 
 \item{parameters_for_analysis}{All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.}
 
