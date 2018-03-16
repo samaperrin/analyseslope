@@ -1,7 +1,7 @@
 #' Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.
 #'
 #' @title Analyse slope
-#' @param upstream_slopes_test Table dervied from the extract_slope_params function.
+#' @param upstream_slopes_test Table derived from the extract_slope_params function.
 #' @param parameters_for_analysis All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.
 #' @param species Species to analyse
 #' @return A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter on fish presence/absence and B) Full Bayesian analysis for each parameter.
@@ -9,7 +9,7 @@
 
 
 
-# parameters_for_analysis <- colnames(upstream_slopes_test)[6:7]
+#parameters_for_analysis <- names(upstream_slopes_test)[6:7]
 
 slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species){
 
@@ -38,7 +38,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     presence <- upstream_slopes_test[,species]
     nsites <- length(presence)
     site <- 1:nsites
-    slope <- upstream_slopes_test[,parameters_for_analysis[i]]
+    slope <- upstream_slopes_test[,parameters_for_analysis[i]]/100
 
     jags.data <- list(C = presence, nsite = nsites, slope = slope)
 
@@ -49,9 +49,9 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     params <- c("alpha", "beta","p")
 
     # MCMC settings
-    ni <- 50000
+    ni <- 10000
     nt <- 10
-    nb <- 40000
+    nb <- 5000
     nc <- 3
 
     # Call winbugs from R
@@ -59,7 +59,10 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     sink("/dev/null")
     output <- jags(jags.data, inits, params, "Slope_Bayes_GLM.txt", n.chains = nc,
                    n.thin = nt, n.burnin = nb, n.iter = ni)
-    output_update <- update(output, n.iter = 100000, n.thin = 10)
+    sink()
+    print(paste("Running", parameters_for_analysis[i],"update"))
+    sink("/dev/null")
+    output_update <- update(output, n.iter = 50000, n.thin = 10)
     sink()
     z[[i]] <- output_update
     y[i,] <- output_update$BUGSoutput$summary["beta",]

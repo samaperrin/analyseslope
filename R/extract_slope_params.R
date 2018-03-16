@@ -37,11 +37,17 @@
 extract_slope_params <- function(parameters_of_interest, connectivity, con) {
   # Create query
 
-  upstream_slopes_con <- "SELECT * FROM (SELECT lakeid"
-  for (i in parameters_of_interest) {
-    upstream_slopes_con <- paste(upstream_slopes_con,", CAST(unnest(string_to_array(",i,", \', \')) AS numeric) AS ",i,sep="")
+  # Create full list of parameters of interest, plus split into upstreams and downstreams
+  full_poi <- c(paste("downstream",parameters_of_interest,sep="_"),paste("upstream",parameters_of_interest,sep="_"))
+  downstream_poi <- full_poi[1:(length(full_poi)/2)]
+  upstream_poi <- full_poi[(length(full_poi)/2+1):length(full_poi)]
+
+
+  upstream_slopes_con <- "SELECT * FROM (SELECT from_lake,to_lake"
+  for (i in full_poi) {
+    upstream_slopes_con <- paste(upstream_slopes_con,",",i,sep="")
   }
-  upstream_slopes_con <- paste(upstream_slopes_con," FROM temporary.connectivity_sweden_full WHERE upstream_lakes != \'\') AS x",sep="")
+  upstream_slopes_con <- paste(upstream_slopes_con," FROM temporary_sweden_connectivity.lake_connectivity) AS x",sep="")
 
   # Run query and remove duplicates
   print("Running query")
@@ -49,20 +55,20 @@ extract_slope_params <- function(parameters_of_interest, connectivity, con) {
   print("Query complete")
   upstream_slopes <- upstream_slopes[!duplicated(upstream_slopes),]
 
+  # Separate into 2 columns
+  connectivity$from_lake <- with(connectivity, ifelse(lakeID > downstreamLakeID, downstreamLakeID, lakeID))
+  connectivity$to_lake <- with(connectivity, ifelse(lakeID < downstreamLakeID, downstreamLakeID, lakeID))
 
-  connectivity_addon <- as.data.frame(matrix(NA,ncol=length(parameters_of_interest)-1,nrow=nrow(connectivity)))
-  colnames(connectivity_addon) <- gsub("upstream_lakes_","",parameters_of_interest[-1])
+  relevant_connections <- merge(connectivity,upstream_slopes,by=c("from_lake","to_lake"),all.x=TRUE)
 
-  for ( i in 1:nrow(connectivity)) {
-    slope_1conx <- upstream_slopes %>%
-      filter(lakeid == connectivity[i,"downstreamLakeID"] &
-               upstream_lakes == connectivity[i,"lakeID"])
-    connectivity_addon[i,1:ncol(connectivity_addon)] <- slope_1conx[3:(2+ncol(connectivity_addon))]
-  }
-  connectivity_slopes <- cbind(connectivity, connectivity_addon)
+  upstreams_cons <- relevant_connections[relevant_connections$direction =="normal",][,c("locationID","downstreamLakeID","lakeID","Pike","Perch",downstream_poi)]
+  downstreams_cons <- relevant_connections[relevant_connections$direction =="reverse",][,c("locationID","downstreamLakeID","lakeID","Pike","Perch",upstream_poi)]
 
+  names(upstreams_cons) <- gsub("downstream_","",names(upstreams_cons))
+  names(downstreams_cons) <- gsub("upstream_","",names(downstreams_cons))
 
-
+  connectivity_slopes <- rbind(upstreams_cons,downstreams_cons)
+  connectivity_slopes <- connectivity_slopes[complete.cases(connectivity_slopes),]
   return(connectivity_slopes)
 }
 

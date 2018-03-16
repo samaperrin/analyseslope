@@ -9,7 +9,7 @@
 #' @export
 
 
-dispersal_likelihood <- function(slopes, slope_analysis_species, parameter) {
+dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter) {
   q_parameter <- slopes_analysis_species$all_data[[parameter]]
   a <- q_parameter$BUGSoutput$mean$alpha
   b <- q_parameter$BUGSoutput$mean$beta

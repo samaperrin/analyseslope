@@ -13,7 +13,7 @@ slope_dbconnect <- function(database, server) {
 pg_drv<-dbDriver("PostgreSQL")
 pg_db <- database
 pg_schema <- "Hydrography"
-pg_tmp_schema <- "temporary"
+pg_tmp_schema <- "temporary_sweden_connectivity"
 pg_user <- getPass::getPass(msg = 'USERNAME: ')
 pg_password <- getPass::getPass(msg = 'PASSWORD: ')
 pg_host <- server
@@ -41,8 +41,9 @@ temp_db <- dbPool(
   password=pg_password,
   host = "vm-srv-finstad.vm.ntnu.no",
   dbname = "nofa",
-  options="-c search_path=temporary" # set db schema from where to look
+  options="-c search_path=temporary_sweden_connectivity" # set db schema from where to look
 )
 a <- list(con=con,temp_db=temp_db)
 return(a)
 }
+
