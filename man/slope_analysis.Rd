@@ -4,7 +4,9 @@
 \alias{slope_analysis}
 \title{Analyse slope}
 \usage{
-slope_analysis(upstream_slopes_test, parameters_for_analysis, species)
+slope_analysis(upstream_slopes_test, parameters_for_analysis, species,
+  n.iter = 10000, n.thin = 10, n.burn = 2000, n.chai = 3,
+  n.upda = 50000)
 }
 \arguments{
 \item{upstream_slopes_test}{Table derived from the extract_slope_params function.}

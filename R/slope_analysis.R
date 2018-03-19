@@ -11,7 +11,7 @@
 
 #parameters_for_analysis <- names(upstream_slopes_test)[6:7]
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=50000){
 
   # Specify model in BUGS language
   cat(file = "Slope_Bayes_GLM.txt","
@@ -49,7 +49,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     params <- c("alpha", "beta","p")
 
     # MCMC settings
-    ni <- 10000
+    ni <-
     nt <- 10
     nb <- 5000
     nc <- 3
@@ -57,12 +57,12 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     # Call winbugs from R
     print(paste("Running", parameters_for_analysis[i]))
     sink("/dev/null")
-    output <- jags(jags.data, inits, params, "Slope_Bayes_GLM.txt", n.chains = nc,
-                   n.thin = nt, n.burnin = nb, n.iter = ni)
+    output <- jags(jags.data, inits, params, "Slope_Bayes_GLM.txt", n.chains = n.chai,
+                   n.thin = n.thin, n.burnin = n.burn, n.iter = n.iter)
     sink()
     print(paste("Running", parameters_for_analysis[i],"update"))
     sink("/dev/null")
-    output_update <- update(output, n.iter = 50000, n.thin = 10)
+    output_update <- update(output, n.iter = n.upda, n.thin = n.thin)
     sink()
     z[[i]] <- output_update
     y[i,] <- output_update$BUGSoutput$summary["beta",]
