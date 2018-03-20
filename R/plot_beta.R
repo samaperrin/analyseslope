@@ -5,7 +5,7 @@
 #' @param parameters_to_plot The parameters you wish to plot
 #'
 #'
-#' @result A graph showing significance of effects
+#' @return A graph showing significance of effects
 #'
 #' @export
 

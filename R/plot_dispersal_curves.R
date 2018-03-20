@@ -29,7 +29,7 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
     lines(x[order.x], y,type='l',col=col_vector[i])
 
   }
-legend(2000,1,legend=slope_parameters,fill=col_vector[1:length(slope_parameters)])
+legend(x.limit*.5,1,legend=slope_parameters,cex=0.8,fill=col_vector[1:length(slope_parameters)],bty='n')
   }
 
 

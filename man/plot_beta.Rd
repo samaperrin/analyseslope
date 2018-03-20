@@ -11,6 +11,9 @@ plot_beta(slope_analysis_fish, parameters_to_plot)
 
 \item{parameters_to_plot}{The parameters you wish to plot}
 }
+\value{
+A graph showing significance of effects
+}
 \description{
 Creates a series of plots showing significance of slope effect.
 }
