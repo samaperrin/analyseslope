@@ -17,5 +17,5 @@ plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species,
 \item{slope_parameters}{The parameters you wish to plot}
 }
 \description{
-Creates a series of plots comparing slope parameters to presence of fish upstream.
+Creates a plot showing a series of parameter curves.
 }

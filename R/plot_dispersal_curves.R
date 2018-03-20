@@ -1,4 +1,4 @@
-#' Creates a series of plots comparing slope parameters to presence of fish upstream.
+#' Creates a plot showing a series of parameter curves.
 #'
 #' @title Plots dispersal curves
 #' @param your_upstream_slopes Table generated from the extract_slope_params function.
