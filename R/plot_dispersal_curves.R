@@ -9,10 +9,12 @@
 #' @export
 
 #test
-#slope_analysis_fish <- slope_analysis_pike
-#your_upstream_slopes <- upstream_slopes
-#species <- "Pike"
-#slope_parameters <- c("slope_mean","slope_max")
+slope_analysis_fish <- slope_analysis_perch
+your_upstream_slopes <- upstream_slopes
+species <- "Perch"
+slope_parameters <- c("slope_mean","slope_max","slope_max_max")
+
+plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species, slope_parameters)
 
 plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, species, slope_parameters){
   n <- length(slope_parameters)
@@ -26,7 +28,8 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
     order.x <- order(x)
     pre.y <- slope_analysis_fish$all_data[[slope_parameters[i]]]
     y <- pre.y$BUGSoutput$mean$p[order.x]
-    lines(x[order.x], y,type='l',col=col_vector[i])
+    ltype <- ifelse(slope_analysis_fish$summary[slope_parameters[i],'97.5%']>0,2,1)
+    lines(x[order.x], y,type='l',col=col_vector[i],lty=ltype)
 
   }
 legend(x.limit*.5,1,legend=slope_parameters,cex=0.8,fill=col_vector[1:length(slope_parameters)],bty='n')
