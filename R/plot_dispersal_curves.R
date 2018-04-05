@@ -9,12 +9,12 @@
 #' @export
 
 #test
-slope_analysis_fish <- slope_analysis_perch
-your_upstream_slopes <- upstream_slopes
-species <- "Perch"
-slope_parameters <- c("slope_mean","slope_max","slope_max_max")
+#slope_analysis_fish <- slope_analysis_perch
+#your_upstream_slopes <- upstream_slopes
+#species <- "Perch"
+#slope_parameters <- c("slope_mean","slope_max","slope_max_max")
 
-plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species, slope_parameters)
+#plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species, slope_parameters)
 
 plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, species, slope_parameters){
   n <- length(slope_parameters)

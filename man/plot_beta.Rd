@@ -4,7 +4,7 @@
 \alias{plot_beta}
 \title{Plots beta values of slope parameters}
 \usage{
-plot_beta(slope_analysis_fish, parameters_to_plot)
+plot_beta(slope_analysis_fish, parameters_to_plot, species)
 }
 \arguments{
 \item{slope_analysis_fish}{The slope analysis table for your species}
