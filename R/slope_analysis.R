@@ -9,11 +9,16 @@
 
 
 
-#parameters_for_analysis <- names(upstream_slopes_test)[6:7]
+#parameters_for_analysis <- names(upstream_slopes_test)[6:9]
+#upstream_slopes_test <- extract_slope_params(parameters_of_interest,connectivity,connections$con,include.length = TRUE)
+#slope_analysis_pike <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,"Pike")
+#slope_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,"Perch")
+#sink()
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=50000){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, include.distance = FALSE, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=50000){
 
   # Specify model in BUGS language
+  if (include.distance==FALSE) {
   cat(file = "Slope_Bayes_GLM.txt","
       model {
 
@@ -29,9 +34,28 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
       }
       }
       ")
+  } else {
+    cat(file = "Slope_Bayes_GLM.txt","
+      model {
 
+      # Priors
+      beta ~ dnorm(0, 0.00001)        # Prior for slopes
+      beta2 ~ dnorm(0, 0.00001)        # Prior for slopes
+
+      alpha ~ dnorm(0, 1.0E-06)       # Prior for intercepts
+
+      # Likelihood
+      for (i in 1:nsite){
+      C[i] ~ dbern(p[i])
+      logit(p[i]) <- alpha + beta*slope[i] + beta2*distance[i]
+      }
+      }
+      ")
+  }
   z=list()
   y=as.data.frame(matrix(NA,nrow=length(parameters_for_analysis),ncol=9))
+  if (include.distance==TRUE) {d <- as.data.frame(matrix(NA,nrow=length(parameters_for_analysis),ncol=9))}
+
 
   for(i in 1:length(parameters_for_analysis))
   {
@@ -39,20 +63,21 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     nsites <- length(presence)
     site <- 1:nsites
     slope <- upstream_slopes_test[,parameters_for_analysis[i]]/100
-
     jags.data <- list(C = presence, nsite = nsites, slope = slope)
 
     # Initial values
     inits <- function () list(alpha = runif(1, -10, 10), beta = runif(1,-1,1))
 
-    # Parameters monitored
+        # Parameters monitored
     params <- c("alpha", "beta","p")
 
-    # MCMC settings
-    ni <-
-    nt <- 10
-    nb <- 5000
-    nc <- 3
+    if (include.distance == TRUE) {distance <- log(upstream_slopes_test[,"total_stream_length"])
+    jags.data <- list(C = presence, nsite = nsites, slope = slope,distance=distance)
+    inits <- function () list(alpha = runif(1, -10, 10), beta = runif(1,-1,1), beta2 = runif(1,-1,1))
+    params <- c("alpha", "beta","beta2","p")
+    }
+
+
 
     # Call winbugs from R
     print(paste("Running", parameters_for_analysis[i]))
@@ -66,12 +91,16 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
     sink()
     z[[i]] <- output_update
     y[i,] <- output_update$BUGSoutput$summary["beta",]
+    if (include.distance==TRUE) {d[i,] <- output_update$BUGSoutput$summary["beta2",]}
   }
   #output_short <- round(output_update,dig=3)
   names(z) <- parameters_for_analysis
   colnames(y) <- colnames(output_update$BUGSoutput$summary)
   rownames(y) <- parameters_for_analysis
   final_output <- list(all_data = z, summary = y)
+  if (include.distance==TRUE) {  colnames(d) <- colnames(output_update$BUGSoutput$summary)
+  rownames(d) <- parameters_for_analysis
+  final_output <- list(all_data = z, summary = y, distance.summary = d)}
   return(final_output)
 }
 

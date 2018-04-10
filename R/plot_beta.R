@@ -9,6 +9,11 @@
 #'
 #' @export
 
+#plot_beta(slope_analysis_perch,parameters_for_analysis,"Perch")
+#slope_analysis_fish <- slope_analysis_pike
+#species <- "Pike"
+#parameters_to_plot <- parameters_for_analysis
+
 plot_beta <- function(slope_analysis_fish,parameters_to_plot,species) {
   fsum <- slope_analysis_fish$summary[parameters_to_plot,]
   min.y <- min(fsum$`2.5%`)

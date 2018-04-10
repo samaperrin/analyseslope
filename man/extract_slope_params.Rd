@@ -4,7 +4,8 @@
 \alias{extract_slope_params}
 \title{This function extracts slope parameters for the connection between two lakes from the requisite database.}
 \usage{
-extract_slope_params(parameters_of_interest, connectivity, con)
+extract_slope_params(parameters_of_interest, connectivity, con,
+  include.length = FALSE)
 }
 \arguments{
 \item{parameters_of_interest}{A vector containing the names of the slope parameters you wish to extract. These can be extracted using the code found in the examples.}

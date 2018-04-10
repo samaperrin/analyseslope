@@ -23,9 +23,10 @@
 
 # Define parameters of interest
 
-# parameters_of_interest <- c("upstream_lakes", "upstream_lakes_slope_max_max","upstream_lakes_slope_max", "upstream_lakes_slope_perc_90", "upstream_lakes_slope_perc_90_max")
-# con already defined
+#parameters_of_interest <- c("slope_max_max","slope_max", "slope_perc_90", "slope_perc_90_max")
+#con <- connections$con
 
+#extract_slope_params(parameters_of_interest,connectivity,con,include.length = TRUE)
 # Upload the lake connections
 
 # connectivity_raw <- read.csv(file="./slope_analysis/Data/sweden_connections.csv",sep=',',header=T)
@@ -33,8 +34,7 @@
 #  filter(!is.na(Present))
 # head(connectivity)
 
-
-extract_slope_params <- function(parameters_of_interest, connectivity, con) {
+extract_slope_params <- function(parameters_of_interest, connectivity, con,include.length=FALSE) {
   # Create query
 
   # Create full list of parameters of interest, plus split into upstreams and downstreams
@@ -43,8 +43,10 @@ extract_slope_params <- function(parameters_of_interest, connectivity, con) {
   upstream_poi <- full_poi[(length(full_poi)/2+1):length(full_poi)]
 
 
-  upstream_slopes_con <- "SELECT * FROM (SELECT from_lake,to_lake"
-  for (i in full_poi) {
+  if (include.length==FALSE) {upstream_slopes_con <- "SELECT * FROM (SELECT from_lake,to_lake"
+  } else {upstream_slopes_con <- "SELECT * FROM (SELECT from_lake,to_lake,total_stream_length"}
+
+    for (i in full_poi) {
     upstream_slopes_con <- paste(upstream_slopes_con,",",i,sep="")
   }
   upstream_slopes_con <- paste(upstream_slopes_con," FROM temporary_sweden_connectivity.lake_connectivity) AS x",sep="")
@@ -68,6 +70,8 @@ extract_slope_params <- function(parameters_of_interest, connectivity, con) {
   names(downstreams_cons) <- gsub("upstream_","",names(downstreams_cons))
 
   connectivity_slopes <- rbind(upstreams_cons,downstreams_cons)
+  if (include.length==TRUE) {connectivity_slopes <- merge(connectivity_slopes,relevant_connections[,c("locationID","total_stream_length")])}
+
   connectivity_slopes <- connectivity_slopes[complete.cases(connectivity_slopes),]
   return(connectivity_slopes)
 }
