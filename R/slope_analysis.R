@@ -9,98 +9,102 @@
 
 
 
+#upstream_slopes_test <- upstream_slopes
 #parameters_for_analysis <- names(upstream_slopes_test)[6:9]
-#upstream_slopes_test <- extract_slope_params(parameters_of_interest,connectivity,connections$con,include.length = TRUE)
-#slope_analysis_pike <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,"Pike")
-#slope_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,"Perch")
+#species <- "Perch"
+#include.distance=TRUE
+#just.distance=FALSE
+#slope_analysis_pike <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,species="Pike")
+#slope_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,species="Perch")
 #sink()
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, include.distance = FALSE, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=50000){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, include.distance = FALSE, just.distance = FALSE, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
+
+  if (just.distance==TRUE & include.distance==FALSE) {
+    stop("You can't not include distance and have just distance, you derp.")
+  }
 
   # Specify model in BUGS language
-  if (include.distance==FALSE) {
-  cat(file = "Slope_Bayes_GLM.txt","
+      cat(file = "Slope_Bayes_GLM.txt","
       model {
 
       # Priors
-      beta ~ dnorm(0, 0.00001)        # Prior for slopes
-
-      alpha ~ dnorm(0, 1.0E-06)       # Prior for intercepts
+      for (i in 1:K) { beta[i] ~ dnorm(0, 0.0001)}
 
       # Likelihood
       for (i in 1:nsite){
       C[i] ~ dbern(p[i])
-      logit(p[i]) <- alpha + beta*slope[i]
+      logit(p[i]) <- inprod(beta[], X[i,])
       }
       }
       ")
-  } else {
-    cat(file = "Slope_Bayes_GLM.txt","
-      model {
 
-      # Priors
-      beta ~ dnorm(0, 0.00001)        # Prior for slopes
-      beta2 ~ dnorm(0, 0.00001)        # Prior for slopes
-
-      alpha ~ dnorm(0, 1.0E-06)       # Prior for intercepts
-
-      # Likelihood
-      for (i in 1:nsite){
-      C[i] ~ dbern(p[i])
-      logit(p[i]) <- alpha + beta*slope[i] + beta2*distance[i]
-      }
-      }
-      ")
-  }
+  param_length <- ifelse(just.distance==TRUE,1,length(parameters_for_analysis))
   z=list()
-  y=as.data.frame(matrix(NA,nrow=length(parameters_for_analysis),ncol=9))
-  if (include.distance==TRUE) {d <- as.data.frame(matrix(NA,nrow=length(parameters_for_analysis),ncol=9))}
+  y <- vector("list", ifelse(include.distance==FALSE,1,ifelse(just.distance==TRUE,1,2)))
+  for (k in 1:length(y)) {
+  y[[k]] <- as.data.frame(matrix(NA,nrow=param_length,ncol=9))
+  if (just.distance==TRUE) {
+  rownames(y[[k]]) <- "distance"
+  } else {
+    rownames(y[[k]]) <- parameters_for_analysis
+  }
+  }
 
 
-  for(i in 1:length(parameters_for_analysis))
+
+  for(i in 1:param_length)
   {
     presence <- upstream_slopes_test[,species]
     nsites <- length(presence)
     site <- 1:nsites
     slope <- upstream_slopes_test[,parameters_for_analysis[i]]/100
-    jags.data <- list(C = presence, nsite = nsites, slope = slope)
+    distance <- log(upstream_slopes_test[,"total_stream_length"])
+    if (include.distance==FALSE) {
+      X <- model.matrix(~ + slope)
+    } else {
+      if (just.distance==TRUE) {
+        X <- model.matrix(~ + distance)
+      } else {
+        X <- model.matrix(~ + slope + distance)
+      }
+    }
+    K <-  ncol(X)
 
+    jags.data <- list(C = presence, X = X, nsite = nsites, K = K)
     # Initial values
-    inits <- function () list(alpha = runif(1, -10, 10), beta = runif(1,-1,1))
+    inits  <- function () {
+      list(
+        beta = rnorm(K, 0, 0.00001))  }
 
         # Parameters monitored
-    params <- c("alpha", "beta","p")
-
-    if (include.distance == TRUE) {distance <- log(upstream_slopes_test[,"total_stream_length"])
-    jags.data <- list(C = presence, nsite = nsites, slope = slope,distance=distance)
-    inits <- function () list(alpha = runif(1, -10, 10), beta = runif(1,-1,1), beta2 = runif(1,-1,1))
-    params <- c("alpha", "beta","beta2","p")
-    }
-
+    params <- c("beta","p")
 
 
     # Call winbugs from R
-    print(paste("Running", parameters_for_analysis[i]))
+    print(paste("Running parameter",i))
     sink("/dev/null")
     output <- jags(jags.data, inits, params, "Slope_Bayes_GLM.txt", n.chains = n.chai,
                    n.thin = n.thin, n.burnin = n.burn, n.iter = n.iter)
     sink()
-    print(paste("Running", parameters_for_analysis[i],"update"))
+    print(paste("Running parameter",i,"update"))
     sink("/dev/null")
     output_update <- update(output, n.iter = n.upda, n.thin = n.thin)
     sink()
+
+    # Need to fix this so we get
     z[[i]] <- output_update
-    y[i,] <- output_update$BUGSoutput$summary["beta",]
-    if (include.distance==TRUE) {d[i,] <- output_update$BUGSoutput$summary["beta2",]}
+    for (k in 1:(K-1)) {
+    y[[k]][i,] <- round(output_update$BUGSoutput$summary[k+1,],5)
+    }
   }
   #output_short <- round(output_update,dig=3)
-  names(z) <- parameters_for_analysis
-  colnames(y) <- colnames(output_update$BUGSoutput$summary)
-  rownames(y) <- parameters_for_analysis
-  final_output <- list(all_data = z, summary = y)
-  if (include.distance==TRUE) {  colnames(d) <- colnames(output_update$BUGSoutput$summary)
-  rownames(d) <- parameters_for_analysis
-  final_output <- list(all_data = z, summary = y, distance.summary = d)}
+  if(just.distance==TRUE) {
+    names(z) <- "distance"
+  } else {names(z) <- parameters_for_analysis}
+  names(y) <- colnames(X)[-1]
+  for (k in 1:(K-1)) {colnames(y[[k]]) <- colnames(output_update$BUGSoutput$summary)}
+  final_output <- list(all_data = z, summaries = y)
   return(final_output)
 }
 

@@ -4,12 +4,16 @@
 \alias{plot_beta}
 \title{Plots beta values of slope parameters}
 \usage{
-plot_beta(slope_analysis_fish, parameters_to_plot, species)
+plot_beta(slope_analysis_fish, parameters_to_plot, species, DoS)
 }
 \arguments{
 \item{slope_analysis_fish}{The slope analysis table for your species}
 
 \item{parameters_to_plot}{The parameters you wish to plot}
+
+\item{species}{The species you fish to plot. Can be either "Pike" or "Perch".}
+
+\item{DoS}{Distance or Slope. Indicates which parameter you want to plot.}
 }
 \value{
 A graph showing significance of effects
