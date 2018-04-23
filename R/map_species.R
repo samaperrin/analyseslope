@@ -48,7 +48,7 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
 
   box_map <- get_map(location = c(left-width/4,bottom-depth/4,right+width/4,top+depth/4), maptype=maptype,zoom=5)
   if (is.na(species)) {
-  d <- data.frame(lat=connectivity_loc$decimalLatitude, lon=connectivity_loc$decimalLongitude)
+  d <- data.frame(lat=connectivity$decimalLatitude, lon=connectivity$decimalLongitude)
   p <- ggmap(box_map) + geom_point(data=d, aes(lon,lat),col='black')
 
   } else {
