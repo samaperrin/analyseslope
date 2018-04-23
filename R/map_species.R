@@ -16,7 +16,7 @@
 
 #species_map(connectivity, get.locations=TRUE,username="sam.perrin",password="vegemite", maptype="terrain")
 
-species_map <- function(connectivity, species = NA, get.locations=FALSE, username = NA, password = NA, maptype)
+map_species <- function(connectivity, species = NA, get.locations=FALSE, username = NA, password = NA, maptype)
 {
   if (get.locations == TRUE) {
     if (is.na(username)) {stop("You need to provide access credential to the database if you don't have coordinates already (ie. get.locations = TRUE)")}
