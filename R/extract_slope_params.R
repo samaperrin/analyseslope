@@ -72,7 +72,7 @@ extract_slope_params <- function(parameters_of_interest, connectivity, con,inclu
   connectivity_slopes <- rbind(upstreams_cons,downstreams_cons)
   if (include.length==TRUE) {connectivity_slopes <- merge(connectivity_slopes,relevant_connections[,c("locationID","total_stream_length")])}
 
-  connectivity_slopes <- connectivity_slopes[complete.cases(connectivity_slopes),]
+  connectivity_slopes <- connectivity_slopes[complete.cases(connectivity_slopes[,-(4:5)]),]
   return(connectivity_slopes)
 }
 

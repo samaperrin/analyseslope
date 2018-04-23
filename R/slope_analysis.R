@@ -4,7 +4,12 @@
 #' @param upstream_slopes_test Table derived from the extract_slope_params function.
 #' @param parameters_for_analysis All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.
 #' @param species Species to analyse
-#' @return A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter on fish presence/absence and B) Full Bayesian analysis for each parameter.
+#' @param include.distance Defines whether or not your analysis should include distance between focal lakes as well as slope
+#' @param just.distance Defines whether or not you just want to analyse distance between focal lakes
+#' @param n.iter All of these parameters (n.iter, n.burn, n.thin, n.chai and n.upda) concern your MCMC sampling. Defaults are 10000, 2000, 10, 3 and 20000, respectively.
+#'
+#' @return A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter and distance between focal lakes on fish presence/absence and B) Full Bayesian analysis for each parameter.
+#'
 #' @export
 
 
@@ -18,10 +23,10 @@
 #slope_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,species="Perch")
 #sink()
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, include.distance = FALSE, just.distance = FALSE, species, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species, include.distance = FALSE, just.distance = FALSE, scale = FALSE, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
 
   if (just.distance==TRUE & include.distance==FALSE) {
-    stop("You can't not include distance and have just distance, you derp.")
+    stop("You can't not include distance and have just distance.")
   }
 
   # Specify model in BUGS language
@@ -58,7 +63,10 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, includ
     presence <- upstream_slopes_test[,species]
     nsites <- length(presence)
     site <- 1:nsites
-    slope <- upstream_slopes_test[,parameters_for_analysis[i]]/100
+    if(scale==TRUE) {slope <- scale(upstream_slopes_test[,parameters_for_analysis[i]]/100)
+    } else {
+      slope <- upstream_slopes_test[,parameters_for_analysis[i]]/100
+    }
     distance <- log(upstream_slopes_test[,"total_stream_length"])
     if (include.distance==FALSE) {
       X <- model.matrix(~ + slope)

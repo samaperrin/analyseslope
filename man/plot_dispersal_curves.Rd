@@ -5,7 +5,7 @@
 \title{Plots dispersal curves}
 \usage{
 plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species,
-  slope_parameters, DoS)
+  slope_parameters, DoS, slope.scaled = FALSE)
 }
 \arguments{
 \item{your_upstream_slopes}{Table generated from the extract_slope_params function.}

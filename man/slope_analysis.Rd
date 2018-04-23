@@ -4,8 +4,8 @@
 \alias{slope_analysis}
 \title{Analyse slope}
 \usage{
-slope_analysis(upstream_slopes_test, parameters_for_analysis,
-  include.distance = FALSE, just.distance = FALSE, species,
+slope_analysis(upstream_slopes_test, parameters_for_analysis, species,
+  include.distance = FALSE, just.distance = FALSE, scale = FALSE,
   n.iter = 10000, n.thin = 10, n.burn = 2000, n.chai = 3,
   n.upda = 20000)
 }
@@ -15,9 +15,15 @@ slope_analysis(upstream_slopes_test, parameters_for_analysis,
 \item{parameters_for_analysis}{All slope parameters that you want to be evaluated. Note that these do not have to be all of the parameters in your upstream_slopes_test table.}
 
 \item{species}{Species to analyse}
+
+\item{include.distance}{Defines whether or not your analysis should include distance between focal lakes as well as slope}
+
+\item{just.distance}{Defines whether or not you just want to analyse distance between focal lakes}
+
+\item{n.iter}{All of these parameters (n.iter, n.burn, n.thin, n.chai and n.upda) concern your MCMC sampling. Defaults are 10000, 2000, 10, 3 and 20000, respectively.}
 }
 \value{
-A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter on fish presence/absence and B) Full Bayesian analysis for each parameter.
+A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter and distance between focal lakes on fish presence/absence and B) Full Bayesian analysis for each parameter.
 }
 \description{
 Function performs Bayesian analysis on the relationship between a slope parameter and the presence/absence of a fish species.
