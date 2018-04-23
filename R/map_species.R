@@ -52,10 +52,10 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
   p <- ggmap(box_map) + geom_point(data=d, aes(lon,lat),col='black')
 
   } else {
-    d1 <- data.frame(lat=connectivity_loc[connectivity_loc[,species] == 1,]$decimalLatitude,
-                    lon=connectivity_loc[connectivity_loc[,species] == 1,]$decimalLongitude)
-    d0 <- data.frame(lat=connectivity_loc[connectivity_loc[,species] == 0,]$decimalLatitude,
-                     lon=connectivity_loc[connectivity_loc[,species] == 0,]$decimalLongitude)
+    d1 <- data.frame(lat=connectivity[connectivity[,species] == 1,]$decimalLatitude,
+                    lon=connectivity[connectivity[,species] == 1,]$decimalLongitude)
+    d0 <- data.frame(lat=connectivity[connectivity[,species] == 0,]$decimalLatitude,
+                     lon=connectivity[connectivity[,species] == 0,]$decimalLongitude)
     p <- ggmap(box_map) + geom_point(data=d1, aes(lon,lat),col='blue') + geom_point(data=d0, aes(lon,lat),col='red')
   }
   p
