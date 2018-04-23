@@ -4,8 +4,7 @@
 \alias{map_species}
 \title{Maps fish occurrence}
 \usage{
-map_species(connectivity, species = NA, get.locations = FALSE,
-  username = NA, password = NA, maptype)
+map_species(connectivity, species = NA, get.locations = FALSE, maptype)
 }
 \arguments{
 \item{connectivity}{Table showing at the minimum location IDs for your lakes. Can also show presence/absence for different species, and can contain latitude and longitude.}
@@ -13,8 +12,6 @@ map_species(connectivity, species = NA, get.locations = FALSE,
 \item{species}{The species to map. Can be ignored, in which case map will just plot lakes.}
 
 \item{get.locations}{If you do not have latitude and longitude, this should be set to TRUE.}
-
-\item{username}{This and "password" are your login credentials for the nofa server, which you will need to provide if get.locations is TRUE and you need to access nofa to find coordinates of your lakes.}
 
 \item{maptype}{The type of map you would like to use. Defaults to "terrain".}
 }

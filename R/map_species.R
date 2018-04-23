@@ -4,7 +4,6 @@
 #' @param connectivity Table showing at the minimum location IDs for your lakes. Can also show presence/absence for different species, and can contain latitude and longitude.
 #' @param get.locations If you do not have latitude and longitude, this should be set to TRUE.
 #' @param species The species to map. Can be ignored, in which case map will just plot lakes.
-#' @param username This and "password" are your login credentials for the nofa server, which you will need to provide if get.locations is TRUE and you need to access nofa to find coordinates of your lakes.
 #' @param maptype The type of map you would like to use. Defaults to "terrain".
 #'
 #' @export
@@ -16,10 +15,11 @@
 
 #species_map(connectivity, get.locations=TRUE,username="sam.perrin",password="vegemite", maptype="terrain")
 
-map_species <- function(connectivity, species = NA, get.locations=FALSE, username = NA, password = NA, maptype)
+map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype)
 {
   if (get.locations == TRUE) {
-    if (is.na(username)) {stop("You need to provide access credential to the database if you don't have coordinates already (ie. get.locations = TRUE)")}
+    username <- getPass::getPass(msg = 'USERNAME: ')
+    password <- getPass::getPass(msg = 'PASSWORD: ')
     focal.lakes <- connectivity$locationID
     connect <- dbPool(
       drv = RPostgreSQL::PostgreSQL(),
