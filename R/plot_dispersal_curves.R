@@ -9,11 +9,11 @@
 #' @export
 
 #test
-slope_analysis_fish <- gradient_analysis_pike
-your_upstream_slopes <- upstream_slopes
-dim(your_upstream_slopes)
+#slope_analysis_fish <- gradient_analysis_pike
+#your_upstream_slopes <- upstream_slopes
+#dim(your_upstream_slopes)
 #species <- "Perch"
-slope_parameters <- c("gradient_mean","gradient_max_max")
+#slope_parameters <- c("gradient_mean","gradient_max_max")
 #DoS <- "distance"
 #plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species, slope_parameters,DoS = "slope")
 
