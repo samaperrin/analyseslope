@@ -9,15 +9,19 @@
 #' @export
 
 #test
-#slope_analysis_fish <- slope_analysis_perch
-##your_upstream_slopes <- upstream_slopes
+slope_analysis_fish <- gradient_analysis_pike
+your_upstream_slopes <- upstream_slopes
+dim(your_upstream_slopes)
 #species <- "Perch"
-#slope_parameters <- c("slope_mean","slope_third_quart","slope_max","slope_max_max")
+slope_parameters <- c("gradient_mean","gradient_max_max")
 #DoS <- "distance"
 #plot_dispersal_curves(your_upstream_slopes, slope_analysis_fish, species, slope_parameters,DoS = "slope")
 
 plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, species, slope_parameters,DoS,slope.scaled=FALSE){
 
+  your_upstream_slopes[,slope_parameters][your_upstream_slopes[,slope_parameters]==0] <- 1
+  sg <- ifelse(grepl("gradient",slope_parameters[1]),"gradient","slope")
+  lab <- ifelse(slope.scaled==TRUE,paste0("Downstream scaled ", sg),paste0("Downstream ",sg," in degress x 100"))
   # CASE 1: We want slope and we have both slope and distance
 
   condition2 <- length(slope_analysis_fish$summaries)
@@ -28,11 +32,11 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
     } else {
       range.X <- range(your_upstream_slopes[,slope_parameters])/100
     }
-    qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-    col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+    sink("/dev/null")
+    col_vector = wheel("darkblue", num = n)
+    sink()
 
-
-    plot(your_upstream_slopes[,species] ~ your_upstream_slopes[,slope_parameters[1]],type='n',ylab=paste0(species," Presence/Absence"),xlab="Slope in degrees x 100",xlim=range.X)
+    plot(your_upstream_slopes[,species] ~ your_upstream_slopes[,slope_parameters[1]],type='n',ylab=paste0(species," Presence/Absence"),xlab=lab,xlim=range.X)
     for(i in 1:length(slope_parameters)){
       full_analysis <- slope_analysis_fish$all_data[[slope_parameters[i]]]
       betas <- full_analysis$BUGSoutput$mean$beta
@@ -59,10 +63,11 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
       } else {
         range.X <- range(your_upstream_slopes[,slope_parameters])/100
       }
-      qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-      col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+      sink("/dev/null")
+      col_vector = wheel("darkblue", num = n)
+      sink()
       # Make plot
-      plot(your_upstream_slopes[,species] ~ your_upstream_slopes[,slope_parameters[1]],type='n',ylab=paste0(species," Presence/Absence"),xlab="Slope in degrees x 100",xlim=range.X)
+      plot(your_upstream_slopes[,species] ~ your_upstream_slopes[,slope_parameters[1]],type='n',ylab=paste0(species," Presence/Absence"),xlab=lab,xlim=range.X)
       for(i in 1:length(slope_parameters)){
         full_analysis <- slope_analysis_fish$all_data[[slope_parameters[i]]]
         betas <- full_analysis$BUGSoutput$mean$beta
@@ -103,8 +108,10 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
         # Set range and colours
         n <- length(slope_parameters)
         x.limit <- range(log(your_upstream_slopes[,"total_stream_length"]))
-        qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-        col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+        sink("/dev/null")
+        col_vector = wheel("darkblue", num = n)
+        sink()
+
         # Make plot
         plot(your_upstream_slopes[,species] ~ your_upstream_slopes[,"total_stream_length"],type='n',ylab=paste0(species," Presence/Absence"),xlab="Distance",xlim=x.limit)
         for(i in 1:length(slope_parameters)){
@@ -112,8 +119,8 @@ plot_dispersal_curves <- function(your_upstream_slopes, slope_analysis_fish, spe
           betas <- full_analysis$BUGSoutput$mean$beta
           x <- seq(x.limit[1],x.limit[2],(x.limit[2]-x.limit[1])/100)
           ltype <- ifelse(slope_analysis_fish$summaries$distance[slope_parameters[i],'97.5%']>0,2,1)
-          if (slope.scaled == TRUE) {avg.slope <- median(scale(log(upstream_slopes[,slope_parameters[i]])))
-          } else {avg.slope <- median(log(upstream_slopes[,slope_parameters[i]]))}
+          if (slope.scaled == TRUE) {avg.slope <- median(scale(log(your_upstream_slopes[,slope_parameters[i]])))
+          } else {avg.slope <- median(log(your_upstream_slopes[,slope_parameters[i]]))}
           expres <- exp(betas[1]+betas[3]*x+betas[2]*avg.slope)
           lines(x,expres/(1+expres),type='l',col=col_vector[i],lty=ltype)
         }

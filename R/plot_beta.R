@@ -28,7 +28,7 @@ plot_beta <- function(slope_analysis_fish,parameters_to_plot,species,DoS) {
   min.y <- min(fsum$`2.5%`)
   max.y <- max(c(fsum$`97.5%`),-0.5*min.y)
   plot(0, 0, xlim = c(0.5, nrow(fsum)+0.5), ylim = c(min.y, max.y), type = "n",xaxt='n',xlab='',
-       ylab = paste0("Beta distribution (",species,")"), main="Blue lines indicate parameter significance")
+       ylab = paste0("Beta distribution (",species,")"))
   abline(h = 0,col = "grey")
   arrow_col <- character()
   for (i in 1:nrow(fsum)) {
