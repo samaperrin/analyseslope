@@ -112,7 +112,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
   } else {names(z) <- parameters_for_analysis}
   names(y) <- colnames(X)[-1]
   for (k in 1:(K-1)) {colnames(y[[k]]) <- colnames(output_update$BUGSoutput$summary)}
-  final_output <- list(all_data = z, summaries = y)
+  final_output <- list(all_data = z, summaries = y, data = upstream_slopes_test)
   return(final_output)
 }
 

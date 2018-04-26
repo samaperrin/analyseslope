@@ -7,14 +7,27 @@
 #'
 #' @return Table with lake ids and slopes, with likelihood of dispersal attached
 #' @export
+#'
+#'
+#slopes_analysis_species <- gradient_analysis_perch
+#parameter <- "gradient_mean"
+#slopes
 
+dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter, scaled.model=TRUE,upstream_slopes) {
+  if (scaled.model = TRUE)
+  {mean.oldslopes <- mean(slopes_analysis_species$data[,parameter])
+  sd.oldslopes <- sd(slopes_analysis_species$data[,parameter])
+    slopes$new_slopes <- (slopes$new_slopes-mean.oldslopes)/sd.oldslopes}
+  slopes$new_distances <- log(slopes$new_distances)
 
-dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter) {
   q_parameter <- slopes_analysis_species$all_data[[parameter]]
-  a <- q_parameter$BUGSoutput$mean$alpha
-  b <- q_parameter$BUGSoutput$mean$beta
-  x <- slopes$new_slopes
-  eq <- c(a) + x*c(b)
+  b1 <- q_parameter$BUGSoutput$mean$beta[1]
+  b2 <- q_parameter$BUGSoutput$mean$beta[2]
+  b3 <- q_parameter$BUGSoutput$mean$beta[3]
+
+  s <- slopes$new_slopes
+  d <- slopes$new_distances
+  eq <- c(b1) + s*c(b2) + d*c(b3)
   likeli <- round(exp(eq)/(1+exp(eq)),digits=4)
   c <- as.data.frame(cbind(slopes,likeli))
   return(c)
