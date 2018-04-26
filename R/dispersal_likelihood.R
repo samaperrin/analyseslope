@@ -4,6 +4,7 @@
 #' @param slopes List of lakes with their slopes upstream
 #' @param slope_analysis_species Bayesian slope analysis given by slope_analysis function
 #' @param parameter Slope parameter you wish to evaluate likelihood based on
+#' @param scaled.model Must be TRUE if your variables were scaled when the analysis was run
 #'
 #' @return Table with lake ids and slopes, with likelihood of dispersal attached
 #' @export
@@ -13,8 +14,8 @@
 #parameter <- "gradient_mean"
 #slopes
 
-dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter, scaled.model=TRUE,upstream_slopes) {
-  if (scaled.model = TRUE)
+dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter, scaled.model=TRUE) {
+  if (scaled.model == TRUE)
   {mean.oldslopes <- mean(slopes_analysis_species$data[,parameter])
   sd.oldslopes <- sd(slopes_analysis_species$data[,parameter])
     slopes$new_slopes <- (slopes$new_slopes-mean.oldslopes)/sd.oldslopes}

@@ -4,12 +4,15 @@
 \alias{dispersal_likelihood}
 \title{Likelihood of dispersal calculation}
 \usage{
-dispersal_likelihood(slopes, slopes_analysis_species, parameter)
+dispersal_likelihood(slopes, slopes_analysis_species, parameter,
+  scaled.model = TRUE)
 }
 \arguments{
 \item{slopes}{List of lakes with their slopes upstream}
 
 \item{parameter}{Slope parameter you wish to evaluate likelihood based on}
+
+\item{scaled.model}{Must be TRUE if your variables were scaled when the analysis was run}
 
 \item{slope_analysis_species}{Bayesian slope analysis given by slope_analysis function}
 }
