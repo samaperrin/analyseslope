@@ -5,12 +5,14 @@
 \title{Plots slope parameter}
 \usage{
 plot_slope_params(upstream_slopes_test, dimen, species, parameters_of_interest,
-  main.lab = "")
+  main.lab = "", type = "scatter")
 }
 \arguments{
 \item{upstream_slopes_test}{Table generated from the extract_slope_params function.}
 
 \item{species}{The species to plot}
+
+\item{type}{Type of plot to create. Current options are "scatter" and "boxplot".}
 
 \item{dim}{The dimensions your plots should appear in}
 }

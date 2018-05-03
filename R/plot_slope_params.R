@@ -4,6 +4,7 @@
 #' @param upstream_slopes_test Table generated from the extract_slope_params function.
 #' @param dim The dimensions your plots should appear in
 #' @param species The species to plot
+#' @param type Type of plot to create. Current options are "scatter" and "boxplot".
 #'
 #' @export
 
