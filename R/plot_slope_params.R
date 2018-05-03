@@ -8,17 +8,24 @@
 #' @export
 
 # Note: this function assumes that you want to plot all the slope parameters you derived for the upstream_slopes_test table.
-
+#type="violin"
+#upstream_slopes_test <- upstream_slopes
 ####### ---- Plot/model data #######################
 
-plot_slope_params <- function(upstream_slopes_test, dimen, species, parameters_of_interest,main.lab = "") {
+plot_slope_params <- function(upstream_slopes_test, dimen, species, parameters_of_interest,main.lab = "",type="scatter") {
   par(mfrow = c(dimen[1],dimen[2]))
   n <- length(parameters_of_interest)
+  upstream_slopes_test <- upstream_slopes_test[,c(species,parameters_of_interest)]
+  upstream_slopes_test <- upstream_slopes_test[complete.cases(upstream_slopes_test),]
   for (i in 1:n){
+    if (type=="scatter") {
     y.lab <- ifelse(i %in% seq(1,n,dimen[2]),"Presence/absence upstream","")
     plot(upstream_slopes_test[,species] ~ upstream_slopes_test[,parameters_of_interest[i]], xlab = parameters_of_interest[i], ylab = y.lab, main = main.lab)
+  } else if (type=="boxplot") {
+    y.lab <- ifelse(i %in% seq(1,n,dimen[2]),"Presence/absence upstream","")
+    boxplot(upstream_slopes_test[,parameters_of_interest[i]] ~ upstream_slopes_test[,species], xlab = parameters_of_interest[i], ylab = y.lab, main = main.lab)
   }
-
-}
+    }
+  }
 
 # plot_slope_params(upstream_slopes_test)
