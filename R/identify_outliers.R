@@ -20,7 +20,7 @@ identify_outliers <- function(upstream_slopes_test,parameter_of_interest,species
 
   outliers <- identify(x = upstream_slopes_test[,parameter_of_interest],
                        y = upstream_slopes_test[,species])
-  outliers <- connectivity[outliers,]
+  outliers <- upstream_slopes_test[outliers,]
   print(paste(nrow(outliers)," outliers identified", sep=""))
   return(outliers)
 }

@@ -7,6 +7,7 @@
 #' @param include.distance Defines whether or not your analysis should include distance between focal lakes as well as slope
 #' @param just.distance Defines whether or not you just want to analyse distance between focal lakes
 #' @param n.iter All of these parameters (n.iter, n.burn, n.thin, n.chai and n.upda) concern your MCMC sampling. Defaults are 10000, 2000, 10, 3 and 20000, respectively.
+#' @param interaction Specifies whether or not you want to include the interaction term in your model
 #'
 #' @return A) A summary table showing the means and confidence interval for the beta values of the effects of each slope parameter and distance between focal lakes on fish presence/absence and B) Full Bayesian analysis for each parameter.
 #'
@@ -19,17 +20,34 @@
 #species <- "Perch"
 #include.distance=TRUE
 #just.distance=FALSE
-#slope_analysis_pike <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,species="Pike")
-#slope_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,species="Perch")
+#interaction=TRUE
+#scale=TRUE
+#gradient_analysis_pike <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,scale=TRUE,species="Pike")
+#gradient_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,scale=TRUE,species="Perch")
 #sink()
 
-slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species, include.distance = FALSE, just.distance = FALSE, scale = FALSE, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
+slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, species, include.distance = FALSE, just.distance = FALSE, scale = FALSE, interaction=FALSE, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
 
   if (just.distance==TRUE & include.distance==FALSE) {
     stop("You can't not include distance and have just distance.")
   }
 
   # Specify model in BUGS language
+  if(interaction==TRUE) {
+    cat(file = "Slope_Bayes_GLM.txt","
+      model {
+
+      # Priors
+      for (i in 1:K) { beta[i] ~ dnorm(0, 0.0001)}
+
+      # Likelihood
+      for (i in 1:nsite){
+      C[i] ~ dbern(p[i])
+      logit(p[i]) <- beta[1] + beta[2]*slope[i,] + beta[3]*distance[i] + beta[4]*slope[i,]*distance[i]
+      }
+      }
+      ")
+  } else {
       cat(file = "Slope_Bayes_GLM.txt","
       model {
 
@@ -43,10 +61,14 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
       }
       }
       ")
+  }
 
+  # Identify # of parameters to be calculated
   param_length <- ifelse(just.distance==TRUE,1,length(parameters_for_analysis))
+
+  # Create lists to populate later on
   z=list()
-  y <- vector("list", ifelse(include.distance==FALSE,1,ifelse(just.distance==TRUE,1,2)))
+  y <- vector("list", ifelse(include.distance==FALSE,1,ifelse(just.distance==TRUE,1,ifelse(interaction==TRUE,3,2))))
   for (k in 1:length(y)) {
   y[[k]] <- as.data.frame(matrix(NA,nrow=param_length,ncol=9))
   if (just.distance==TRUE) {
@@ -77,9 +99,13 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
         X <- model.matrix(~ + slope + distance)
       }
     }
-    K <-  ncol(X)
+    K <-  ifelse(interaction==FALSE,ncol(X),ncol(X)+1)
 
+    if(interaction==FALSE) {
     jags.data <- list(C = presence, X = X, nsite = nsites, K = K)
+    } else {
+      jags.data <- list(C = presence, distance = distance, slope= slope, nsite = nsites, K = K)
+    }
     # Initial values
     inits  <- function () {
       list(
@@ -110,7 +136,9 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
   if(just.distance==TRUE) {
     names(z) <- "distance"
   } else {names(z) <- parameters_for_analysis}
-  names(y) <- colnames(X)[-1]
+  if (interaction==TRUE) {
+  names(y) <- c(colnames(X)[-1],"interaction")
+  } else {names(y) <- colnames(X)[-1]}
   for (k in 1:(K-1)) {colnames(y[[k]]) <- colnames(output_update$BUGSoutput$summary)}
   final_output <- list(all_data = z, summaries = y, data = upstream_slopes_test)
   return(final_output)

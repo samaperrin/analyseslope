@@ -6,8 +6,8 @@
 \usage{
 slope_analysis(upstream_slopes_test, parameters_for_analysis, species,
   include.distance = FALSE, just.distance = FALSE, scale = FALSE,
-  n.iter = 10000, n.thin = 10, n.burn = 2000, n.chai = 3,
-  n.upda = 20000)
+  interaction = FALSE, n.iter = 10000, n.thin = 10, n.burn = 2000,
+  n.chai = 3, n.upda = 20000)
 }
 \arguments{
 \item{upstream_slopes_test}{Table derived from the extract_slope_params function.}
@@ -19,6 +19,8 @@ slope_analysis(upstream_slopes_test, parameters_for_analysis, species,
 \item{include.distance}{Defines whether or not your analysis should include distance between focal lakes as well as slope}
 
 \item{just.distance}{Defines whether or not you just want to analyse distance between focal lakes}
+
+\item{interaction}{Specifies whether or not you want to include the interaction term in your model}
 
 \item{n.iter}{All of these parameters (n.iter, n.burn, n.thin, n.chai and n.upda) concern your MCMC sampling. Defaults are 10000, 2000, 10, 3 and 20000, respectively.}
 }
