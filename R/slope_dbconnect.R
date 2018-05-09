@@ -35,6 +35,16 @@ con<-dbConnect(pg_drv,dbname=pg_db,user=pg_user, password=pg_password,host=pg_ho
 
 # load db pool connection
 # retrieves info on lake and presence data, plus most environmental data
+nofa_db <- dbPool(
+  drv = RPostgreSQL::PostgreSQL(),
+  user=pg_user,
+  password=pg_password,
+  host = "vm-srv-finstad.vm.ntnu.no",
+  dbname = "nofa",
+  options="-c search_path=nofa" # set db schema from where to look
+)
+
+
 temp_db <- dbPool(
   drv = RPostgreSQL::PostgreSQL(),
   user=pg_user,
@@ -43,7 +53,9 @@ temp_db <- dbPool(
   dbname = "nofa",
   options="-c search_path=temporary_sweden_connectivity" # set db schema from where to look
 )
-a <- list(con=con,temp_db=temp_db)
+
+
+a <- list(con=con,temp_db=temp_db, nofa_db=nofa_db)
 return(a)
 }
 
