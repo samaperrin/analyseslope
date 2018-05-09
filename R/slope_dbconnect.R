@@ -39,8 +39,8 @@ nofa_db <- dbPool(
   drv = RPostgreSQL::PostgreSQL(),
   user=pg_user,
   password=pg_password,
-  host = "vm-srv-finstad.vm.ntnu.no",
-  dbname = "nofa",
+  host = server,
+  dbname = database,
   options="-c search_path=nofa" # set db schema from where to look
 )
 
@@ -49,8 +49,8 @@ temp_db <- dbPool(
   drv = RPostgreSQL::PostgreSQL(),
   user=pg_user,
   password=pg_password,
-  host = "vm-srv-finstad.vm.ntnu.no",
-  dbname = "nofa",
+  host = server,
+  dbname = database,
   options="-c search_path=temporary_sweden_connectivity" # set db schema from where to look
 )
 
