@@ -14,21 +14,24 @@
 #parameter <- "gradient_mean"
 #slopes
 
-dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter, scaled.model=TRUE) {
+dispersal_likelihood <- function(slopes, slopes_analysis_species, parameter, scaled.model=TRUE, distance=TRUE) {
   if (scaled.model == TRUE)
   {mean.oldslopes <- mean(slopes_analysis_species$data[,parameter])
   sd.oldslopes <- sd(slopes_analysis_species$data[,parameter])
     slopes$new_slopes <- (slopes$new_slopes-mean.oldslopes)/sd.oldslopes}
-  slopes$new_distances <- log(slopes$new_distances)
+
+  if (distance==TRUE) {slopes$new_distances <- log(slopes$new_distances)}
 
   q_parameter <- slopes_analysis_species$all_data[[parameter]]
   b1 <- q_parameter$BUGSoutput$mean$beta[1]
   b2 <- q_parameter$BUGSoutput$mean$beta[2]
-  b3 <- q_parameter$BUGSoutput$mean$beta[3]
+  if (distance==TRUE) {b3 <- q_parameter$BUGSoutput$mean$beta[3]}
 
   s <- slopes$new_slopes
-  d <- slopes$new_distances
-  eq <- c(b1) + s*c(b2) + d*c(b3)
+  if (distance==TRUE) {d <- slopes$new_distances
+  eq <- c(b1) + s*c(b2) + d*c(b3)} else {
+    eq <- c(b1) + s*c(b2)
+  }
   likeli <- round(exp(eq)/(1+exp(eq)),digits=4)
   c <- as.data.frame(cbind(slopes,likeli))
   return(c)

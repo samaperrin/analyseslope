@@ -34,7 +34,7 @@
 #  filter(!is.na(Present))
 # head(connectivity)
 
-extract_slope_params <- function(parameters_of_interest, connectivity, con,include.length=FALSE) {
+extract_slope_params <- function(parameters_of_interest, connectivity, con, include.length=FALSE, db.schema = "temporary_sweden_connectivity") {
   # Create query
 
   # Create full list of parameters of interest, plus split into upstreams and downstreams
@@ -49,7 +49,7 @@ extract_slope_params <- function(parameters_of_interest, connectivity, con,inclu
     for (i in full_poi) {
     upstream_slopes_con <- paste(upstream_slopes_con,",",i,sep="")
   }
-  upstream_slopes_con <- paste(upstream_slopes_con," FROM temporary_sweden_connectivity.lake_connectivity) AS x",sep="")
+  upstream_slopes_con <- paste(upstream_slopes_con," FROM ",db.schema,".lake_connectivity) AS x",sep="")
 
   # Run query and remove duplicates
   print("Running query")

@@ -15,7 +15,7 @@
 
 #species_map(connectivity, get.locations=TRUE,username="sam.perrin",password="vegemite", maptype="terrain")
 
-map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype)
+map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5)
 {
   if (get.locations == TRUE) {
     username <- getPass::getPass(msg = 'USERNAME: ')
@@ -25,7 +25,7 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
       drv = RPostgreSQL::PostgreSQL(),
       user=username,
       password=password,
-      host = "vm-srv-finstad.vm.ntnu.no",
+      host = "vm-srv-wallace.vm.ntnu.no",
       dbname = "nofa",
       options="-c search_path=nofa" # set db schema from where to look
     )
@@ -46,7 +46,7 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
   width <- max(connectivity$decimalLongitude)-min(connectivity$decimalLongitude)
   depth <- max(connectivity$decimalLatitude)-min(connectivity$decimalLatitude)
 
-  box_map <- get_map(location = c(left-width/4,bottom-depth/4,right+width/4,top+depth/4), maptype=maptype,zoom=5)
+  box_map <- get_map(location = c(left-width/4,bottom-depth/4,right+width/4,top+depth/4), maptype=maptype,zoom=zoom)
   if (is.na(species)) {
   d <- data.frame(lat=connectivity$decimalLatitude, lon=connectivity$decimalLongitude)
   p <- ggmap(box_map) + geom_point(data=d, aes(lon,lat),col='black')

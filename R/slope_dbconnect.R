@@ -54,8 +54,15 @@ temp_db <- dbPool(
   options="-c search_path=temporary_sweden_connectivity" # set db schema from where to look
 )
 
+all_db <- dbPool(
+  drv = RPostgreSQL::PostgreSQL(),
+  user=pg_user,
+  password=pg_password,
+  host = server,
+  dbname = database
+)
 
-a <- list(con=con,temp_db=temp_db, nofa_db=nofa_db)
+a <- list(con=con,temp_db=temp_db, nofa_db=nofa_db,all_db=all_db)
 return(a)
 }
 
