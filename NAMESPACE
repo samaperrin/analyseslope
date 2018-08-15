@@ -2,6 +2,7 @@
 
 export(dispersal_likelihood)
 export(extract_slope_params)
+export(get_pseudoR2)
 export(identify_outliers)
 export(map_species)
 export(plot_beta)

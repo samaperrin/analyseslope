@@ -5,7 +5,7 @@
 \title{Likelihood of dispersal calculation}
 \usage{
 dispersal_likelihood(slopes, slopes_analysis_species, parameter,
-  scaled.model = TRUE)
+  scaled.model = TRUE, distance = TRUE)
 }
 \arguments{
 \item{slopes}{List of lakes with their slopes upstream}

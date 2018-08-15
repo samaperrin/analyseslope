@@ -35,6 +35,5 @@ plot_beta <- function(slope_analysis_fish,parameters_to_plot,species,DoS) {
     arrow_col[i] <- ifelse(fsum[i,"97.5%"]<0,"blue","black")
   }
   arrows(x0 = 1:nrow(fsum), x1 = 1:nrow(fsum), y0 = fsum[, "2.5%"], y1 = fsum[, "97.5%"], code = 3, angle = 90, length = 0.05,lwd=2,col=arrow_col)
-  points(x = 1:nrow(fsum), y = fsum[, "50%"],col=arrow_col)
   axis(side=1,at = 1:nrow(fsum),labels=row.names(fsum),las=2,cex.axis=0.7)
 }

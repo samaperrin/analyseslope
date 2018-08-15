@@ -140,7 +140,7 @@ slope_analysis <- function(upstream_slopes_test, parameters_for_analysis, specie
   names(y) <- c(colnames(X)[-1],"interaction")
   } else {names(y) <- colnames(X)[-1]}
   for (k in 1:(K-1)) {colnames(y[[k]]) <- colnames(output_update$BUGSoutput$summary)}
-  final_output <- list(all_data = z, summaries = y, data = upstream_slopes_test)
+  final_output <- list(all_data = z, summaries = y, data = upstream_slopes_test,species = species)
   return(final_output)
 }
 
