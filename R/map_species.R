@@ -15,11 +15,12 @@
 
 #species_map(connectivity, get.locations=TRUE,username="sam.perrin",password="vegemite", maptype="terrain")
 
-map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5)
+map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5, username=NA,password=NA)
 {
+  if (is.na(username)) {username <- getPass::getPass(msg = 'USERNAME: ')}
+  if (is.na(username)) {password <- getPass::getPass(msg = 'PASSWORD: ')}
+
   if (get.locations == TRUE) {
-    username <- getPass::getPass(msg = 'USERNAME: ')
-    password <- getPass::getPass(msg = 'PASSWORD: ')
     focal.lakes <- connectivity$locationID
     connect <- dbPool(
       drv = RPostgreSQL::PostgreSQL(),
