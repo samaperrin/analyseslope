@@ -15,7 +15,7 @@
 #species <- "Perch"
 #parameters_to_plot <- c("slope_max", "slope_max_max")
 
-plot_beta <- function(slope_analysis_fish,parameters_to_plot,species,DoS) {
+plot_beta <- function(slope_analysis_fish,parameters_to_plot,species,DoS,min.y=NA,max.y=NA) {
   if (DoS == "slope") {
     fsum <- slope_analysis_fish$summaries$slope[parameters_to_plot,]
   } else {
@@ -25,8 +25,8 @@ plot_beta <- function(slope_analysis_fish,parameters_to_plot,species,DoS) {
       fsum <- slope_analysis_fish$summaries$distance[parameters_to_plot,]
     }
   }
-  min.y <- min(fsum$`2.5%`)
-  max.y <- max(c(fsum$`97.5%`),-0.5*min.y)
+  if(is.na(min.y)) {min.y <- min(fsum$`2.5%`)}
+  if(is.na(max.y)) {max.y <- max(c(fsum$`97.5%`),-0.5*min.y)}
   plot(0, 0, xlim = c(0.5, nrow(fsum)+0.5), ylim = c(min.y, max.y), type = "n",xaxt='n',xlab='',
        ylab = paste0("Beta distribution (",species,")"))
   abline(h = 0,col = "grey")

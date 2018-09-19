@@ -31,10 +31,10 @@ plot_slope_params <- function(upstream_slopes_test, dimen, species, parameters_o
   for (i in 1:n){
     if (type=="scatter") {
     y.lab <- ifelse(i %in% seq(1,n,dimen[2]),"Presence/absence upstream","")
-    plot(upstream_slopes_test[,species] ~ upstream_slopes_test[,parameters_of_interest[i]], xlab = xlab[i], ylab = y.lab, main = main.lab)
+    plot(upstream_slopes_test[,species] ~ scale(upstream_slopes_test[,parameters_of_interest[i]]), xlab = xlab[i], ylab = y.lab, main = main.lab)
   } else if (type=="boxplot") {
-    y.lab <- ifelse(i %in% seq(1,n,dimen[2]),"Presence/absence upstream","")
-    boxplot(upstream_slopes_test[,parameters_of_interest[i]] ~ upstream_slopes_test[,species], xlab = xlab[i], ylab = y.lab, main = main.lab)
+    y.lab <- ifelse(i > (n-dimen[2]),"Presence/absence upstream","")
+    boxplot(scale(upstream_slopes_test[,parameters_of_interest[i]]) ~ upstream_slopes_test[,species], xlab = y.lab, ylab = xlab[i], main = main.lab)
   }
     }
   }

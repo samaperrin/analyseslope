@@ -59,5 +59,5 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
                      lon=connectivity[connectivity[,species] == 0,]$decimalLongitude)
     p <- ggmap(box_map) + geom_point(data=d1, aes(lon,lat),col='blue') + geom_point(data=d0, aes(lon,lat),col='red')
   }
-  p
+  return(p)
   }
