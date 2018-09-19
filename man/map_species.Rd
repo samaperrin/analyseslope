@@ -5,7 +5,7 @@
 \title{Maps fish occurrence}
 \usage{
 map_species(connectivity, species = NA, get.locations = FALSE, maptype,
-  zoom = 5)
+  zoom = 5, username = NA, password = NA)
 }
 \arguments{
 \item{connectivity}{Table showing at the minimum location IDs for your lakes. Can also show presence/absence for different species, and can contain latitude and longitude.}
