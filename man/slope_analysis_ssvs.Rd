@@ -7,7 +7,7 @@
 slope_analysis_ssvs(upstream_slopes_test, parameters_for_analysis, species,
   include.distance = FALSE, just.distance = FALSE, scale = FALSE,
   interaction = FALSE, n.iter = 10000, n.thin = 10, n.burn = 2000,
-  n.chai = 3, n.upda = 20000)
+  n.chai = 3, n.upda = 20000, to.monitor = c("beta", "p", "ssvs.ind"))
 }
 \arguments{
 \item{upstream_slopes_test}{Table derived from the extract_slope_params function.}
