@@ -15,7 +15,7 @@
 
 #species_map(connectivity, get.locations=TRUE,username="sam.perrin",password="vegemite", maptype="terrain")
 
-map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5, username=NA,password=NA)
+map_species1 <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5, username=NA,password=NA)
 {
   if (is.na(username)) {username <- getPass::getPass(msg = 'USERNAME: ')}
   if (is.na(username)) {password <- getPass::getPass(msg = 'PASSWORD: ')}
@@ -49,15 +49,15 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
 
   box_map <- get_map(location = c(left-width/4,bottom-depth/4,right+width/4,top+depth/4), maptype=maptype,zoom=zoom)
   if (is.na(species)) {
-  d <- data.frame(lat=connectivity$decimalLatitude, lon=connectivity$decimalLongitude)
-  p <- ggmap(box_map) + geom_point(data=d, aes(lon,lat),col='black')
+  d <- data.frame(Latitude=connectivity$decimalLatitude, Longitude=connectivity$decimalLongitude)
+  p <- ggmap(box_map) + geom_point(data=d, aes(Longitude,Latitude),col='black',alpha=0.5)
 
   } else {
-    d1 <- data.frame(lat=connectivity[connectivity[,species] == 1,]$decimalLatitude,
-                    lon=connectivity[connectivity[,species] == 1,]$decimalLongitude)
-    d0 <- data.frame(lat=connectivity[connectivity[,species] == 0,]$decimalLatitude,
-                     lon=connectivity[connectivity[,species] == 0,]$decimalLongitude)
-    p <- ggmap(box_map) + geom_point(data=d1, aes(lon,lat),col='blue') + geom_point(data=d0, aes(lon,lat),col='red')
+    d1 <- data.frame(Latitude=connectivity[connectivity[,species] == 1,]$decimalLatitude,
+                     Longitude=connectivity[connectivity[,species] == 1,]$decimalLongitude)
+    d0 <- data.frame(Latitude=connectivity[connectivity[,species] == 0,]$decimalLatitude,
+                     Longitude=connectivity[connectivity[,species] == 0,]$decimalLongitude)
+    p <- ggmap(box_map) + geom_point(data=d1, aes(Longitude,Latitude),col='blue') + geom_point(data=d0, aes(Longitude,Latitude),col='red')
   }
   return(p)
   }

@@ -26,7 +26,7 @@
 #gradient_analysis_perch <- slope_analysis(upstream_slopes_test,parameters_for_analysis,include.distance=TRUE,scale=TRUE,species="Perch")
 #sink()
 
-slope_analysis_ssvs <- function(upstream_slopes_test, parameters_for_analysis, species, include.distance = FALSE, just.distance = FALSE, scale = FALSE, interaction=FALSE, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000){
+slope_analysis_ssvs <- function(upstream_slopes_test, parameters_for_analysis, species, include.distance = FALSE, just.distance = FALSE, scale = FALSE, interaction=FALSE, n.iter=10000,n.thin=10,n.burn=2000,n.chai=3,n.upda=20000, to.monitor=c("beta","p", "ssvs.ind")){
 
   if (just.distance==TRUE & include.distance==FALSE) {
     stop("You can't not include distance and have just distance.")
@@ -124,7 +124,7 @@ slope_analysis_ssvs <- function(upstream_slopes_test, parameters_for_analysis, s
         beta = rnorm(K, 0, 0.00001))  }
 
         # Parameters monitored
-    params <- c("beta","p")
+    params <- to.monitor
 
 
     # Call winbugs from R
