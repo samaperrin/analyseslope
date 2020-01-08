@@ -32,7 +32,7 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
     )
     locations <- tbl(connect, "location")
     locations <- locations %>%
-      filter(locationID %in% connectivity$locationID) %>%
+      filter(locationID %in% !connectivity$locationID) %>%
       select(locationID, decimalLongitude, decimalLatitude) %>%
       collect()
     connectivity <- merge(connectivity, locations, all.x=TRUE, by="locationID")
