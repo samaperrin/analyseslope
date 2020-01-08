@@ -18,7 +18,7 @@
 map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype, zoom=5, username=NA,password=NA)
 {
   if (is.na(username)) {username <- getPass::getPass(msg = 'USERNAME: ')}
-  if (is.na(username)) {password <- getPass::getPass(msg = 'PASSWORD: ')}
+  if (is.na(password)) {password <- getPass::getPass(msg = 'PASSWORD: ')}
 
   if (get.locations == TRUE) {
     focal.lakes <- connectivity$locationID
@@ -32,7 +32,7 @@ map_species <- function(connectivity, species = NA, get.locations=FALSE, maptype
     )
     locations <- tbl(connect, "location")
     locations <- locations %>%
-      filter(locationID %in% !connectivity$locationID) %>%
+      filter(locationID %in% !!connectivity$locationID) %>%
       select(locationID, decimalLongitude, decimalLatitude) %>%
       collect()
     connectivity <- merge(connectivity, locations, all.x=TRUE, by="locationID")
